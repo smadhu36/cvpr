@@ -1,0 +1,47 @@
+import cv2 
+import numpy as np 
+import matplotlib.pyplot as plt 
+ 
+image = cv2.imread('img.jpg', cv2.IMREAD_GRAYSCALE)   
+ 
+# Function for Bit Level Slicing 
+def bit_level_slicing(image, bit_position): 
+    max_bit = 2**bit_position - 1 
+    sliced_image = np.bitwise_and(image, max_bit) 
+    return sliced_image 
+ 
+# Function for Intensity Level Slicing 
+def intensity_level_slicing(image, low, high): 
+    # Set all pixels outside the range [low, high] to 0 
+    sliced_image = np.zeros_like(image) 
+    sliced_image[(image >= low) & (image <= high)] = image[(image >= low) & (image <= high)] 
+    return sliced_image 
+ 
+# Function for Brightness Adjustment 
+def adjust_brightness(image, brightness_value): 
+    brightness_adjusted = cv2.add(image, brightness_value) 
+    return brightness_adjusted 
+ 
+# Function for Contrast Adjustment 
+def adjust_contrast(image, contrast_value): 
+    contrast_adjusted = cv2.convertScaleAbs(image, alpha=contrast_value, beta=0) 
+    return contrast_adjusted 
+ 
+# Display the images for comparison 
+def display_images(images, titles): 
+    plt.figure(figsize=(10, 10)) 
+    for i, (img, title) in enumerate(zip(images, titles)): 
+        plt.subplot(2, 3, i+1) 
+        plt.imshow(img, cmap='gray') 
+        plt.title(title) 
+        plt.axis('off') 
+    plt.tight_layout() 
+    plt.show() 
+ 
+bit_sliced = bit_level_slicing(image, 3) 
+intensity_sliced = intensity_level_slicing(image, 100, 150) 
+brightness_adjusted = adjust_brightness(image, 50) 
+contrast_adjusted = adjust_contrast(image, 1.5) 
+images = [image, bit_sliced, intensity_sliced, brightness_adjusted, contrast_adjusted] 
+titles = ['Original', 'Bit Level Slicing', 'Intensity Level Slicing', 'Brightness Adjusted', 'Contrast ','Adjusted'] 
+display_images(images, titles) 

@@ -1,0 +1,29 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def perform_morphology(image_path):
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    kernel = np.ones((5, 5), np.uint8)
+    erosion = cv2.erode(image, kernel, iterations=1)
+    dilation = cv2.dilate(image, kernel, iterations=1)
+    opening = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+    closing = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel)
+    return image, erosion, dilation, opening, closing
+
+def display_images(images, titles):
+    plt.figure(figsize=(8, 8))
+    for i, (img, title) in enumerate(zip(images, titles)):
+        plt.subplot(2, 3, i + 1)
+        plt.imshow(img, cmap='gray')
+        plt.title(title)
+        plt.axis('off')
+    plt.show()
+
+image_path = 'image2.png'
+original, erosion, dilation, opening, closing = perform_morphology(image_path)
+
+images = [original, erosion, dilation, opening, closing]
+titles = ['Original Image', 'Erosion', 'Dilation', 'Opening', 'Closing']
+
+display_images(images, titles)

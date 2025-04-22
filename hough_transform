@@ -1,0 +1,26 @@
+import cv2 
+import numpy as np 
+import matplotlib.pyplot as plt 
+# Load the image (convert to grayscale) 
+image = cv2.imread('road.png', cv2.IMREAD_GRAYSCALE) 
+# Step 1: Apply Gaussian Blur to reduce noise 
+blurred = cv2.GaussianBlur(image, (5, 5), 0) 
+# Step 2: Apply Canny edge detection 
+edges = cv2.Canny(blurred, 50, 150, apertureSize=3) 
+# Step 3: Apply Probabilistic Hough Line Transform 
+lines = cv2.HoughLinesP(edges, 1, np.pi / 180, threshold=80, minLineLength=50, maxLineGap=10) 
+# Step 4: Convert grayscale image to BGR to draw colored lines 
+image_with_lines = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR) 
+# Step 5: Draw the detected lines 
+if lines is not None: 
+for line in lines: 
+x1, y1, x2, y2 = line[0] 
+cv2.line(image_with_lines, (x1, y1), (x2, y2), (0, 255, 0), 2) 
+# Step 6: Display both original and result side by side 
+plt.figure(figsize=(14, 6)) 
+# Original image 
+plt.subplot(1, 2, 1) 
+plt.imshow(image, cmap='gray') 
+plt.title('Original Grayscale Image') 
+plt.axis('off') 
+# Image with lines

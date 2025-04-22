@@ -1,1 +1,28 @@
+import numpy as np 
+import matplotlib.pyplot as plt 
+from scipy.ndimage import binary_hit_or_miss 
 
+image = np.array([ 
+    [0, 0, 0, 0, 0, 0], 
+    [0, 1, 1, 1, 0, 0], 
+    [0, 1, 1, 1, 0, 0], 
+    [0, 1, 1, 1, 0, 0], 
+    [0, 0, 0, 0, 0, 0] 
+], dtype=np.uint8) 
+
+struct_element = np.array([ 
+    [-1,  1, -1], 
+    [ 1, -1,  1], 
+    [-1,  1, -1] 
+]) 
+
+hit_miss_result = binary_hit_or_miss(image, structure1=(struct_element == 1), structure2=(struct_element == 0)) 
+hit_miss_result = hit_miss_result.astype(np.uint8) * 255 
+
+plt.subplot(1, 2, 1) 
+plt.imshow(image, cmap='gray', vmin=0, vmax=1) 
+plt.title("Original Image") 
+plt.subplot(1, 2, 2) 
+plt.imshow(hit_miss_result, cmap='gray', vmin=0, vmax=255) 
+plt.title("Hit-or-Miss Output") 
+plt.show()

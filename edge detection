@@ -1,0 +1,30 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+def sobel_edge(image):
+sobel_x = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=3)
+sobel_y = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=3)
+sobel_edges = cv2.magnitude(sobel_x, sobel_y)
+return sobel_edges
+def canny_edge(image):
+canny_edges = cv2.Canny(image, 100, 200)
+return canny_edges
+def laplacian_edge(image):
+laplacian_edges = cv2.Laplacian(image, cv2.CV_64F)
+laplacian_edges = cv2.convertScaleAbs(laplacian_edges)
+return laplacian_edges
+def display_images(images, titles):
+plt.figure(figsize=(12, 8))
+for i, (img, title) in enumerate(zip(images, titles)):
+plt.subplot(2, 3, i+1)
+plt.imshow(img, cmap='gray')
+plt.title(title)
+plt.axis('off')
+plt.show()
+image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+sobel_edges = sobel_edge(image)
+canny_edges = canny_edge(image)
+laplacian_edges = laplacian_edge(image)
+images = [sobel_edges, canny_edges, laplacian_edges]
+titles = ['Sobel Edge','Canny Edge', 'Laplacian Edge']
+display_images(images, titles)

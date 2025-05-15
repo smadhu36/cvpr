@@ -1,16 +1,24 @@
-#image negative
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-image=cv2.imread('flower.png')
-inverse=255-image
-plt.show(inverse)
-#log transformation
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-image=cv2.imread('flower.png')
-c=255/np.log(1+np.max(image))
-log_image=c*(np.log(image+1))
-log_image=np.array(log_image,dtype=np.uint8)
-plt.imshow(log_image)
+
+image = cv2.imread('road.png')
+image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+inverse = 255 - image_rgb
+
+plt.imshow(inverse)
+plt.axis('off')
+plt.title('Negative Image')
+plt.show()
+
+image = cv2.imread('road.png', 0)
+image_float = image.astype(np.float32)
+c = 255 / np.log(1 + np.max(image_float))
+log_image = c * np.log(1 + image_float)
+log_image = np.clip(log_image, 0, 255)
+log_image = log_image.astype(np.uint8)
+
+plt.imshow(log_image, cmap='gray')
+plt.axis('off')
+plt.title('Log Transformed Image')
+plt.show()

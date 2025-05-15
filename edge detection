@@ -13,6 +13,15 @@ def laplacian_edge(image):
 laplacian_edges = cv2.Laplacian(image, cv2.CV_64F)
 laplacian_edges = cv2.convertScaleAbs(laplacian_edges)
 return laplacian_edges
+def roberts_cross_edge(image):
+kernel_x = np.array([[1, 0], [0, -1]])
+kernel_y = np.array([[0, 1], [-1, 0]])
+roberts_x = cv2.filter2D(image, -1, kernel_x)
+roberts_y = cv2.filter2D(image, -1, kernel_y)
+roberts_x = np.float64(roberts_x)
+roberts_y = np.float64(roberts_y)
+roberts_edges = cv2.magnitude(roberts_x, roberts_y)
+return roberts_edges
 def display_images(images, titles):
 plt.figure(figsize=(12, 8))
 for i, (img, title) in enumerate(zip(images, titles)):
